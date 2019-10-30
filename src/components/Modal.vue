@@ -1,19 +1,21 @@
 <template>
   <transition name="modal">
-  <div class="modalMask">
-    <div class="modalWrapper">
-      <div class="modalContainer">
-        <div class="modalHeader">
-          <font-awesome-icon
-            class="icon"
-            @click="$emit('close')"
-            icon="times" />
-        </div>
-        <div class="modalContent">
-          <h2>How does it work?</h2>
-          <p>Every single item from Lush has its own PLU (Price Look-Up) code. Some employees remember the PLU codes to be able to quickly browse through the system and select the right products.<br />
-            You can use this tool to search for PLU codes and/or products.</p>
-          <p>Type in a random number or a product name to check the corresponding PLU code.</p>
+  <div v-if="visible">
+    <div class="modalMask">
+      <div class="modalWrapper">
+        <div class="modalContainer">
+          <div class="modalHeader">
+            <font-awesome-icon
+              class="icon"
+              @click="$emit('close')"
+              icon="times" />
+          </div>
+          <div class="modalContent">
+            <h2>How does it work?</h2>
+            <p>Every single item from Lush has its own PLU (Price Look-Up) code. Some employees remember the PLU codes to be able to quickly browse through the system and select the right products.<br />
+              You can use this tool to search for PLU codes and/or products.</p>
+            <p>Type in a random number or a product name to check the corresponding PLU code.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -24,6 +26,7 @@
 <script>
 export default {
   name: 'Modal',
+  props: ['visible'],
 };
 </script>
 
@@ -37,7 +40,7 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, .2);
   display: table;
-  transition: opacity .3s ease;
+  /*transition: opacity .3s ease;*/
   .modalWrapper {
     display: table-cell;
     vertical-align: middle;
@@ -48,11 +51,9 @@ export default {
       margin: 0px auto;
       padding: 20px;
       background-color: #fff;
-      transition: all .3s ease;
+      /*transition: all .3s ease;*/
       border: 1px solid #d4d4d4;
       border-radius: 4px;
-      -webkit-box-shadow: 0px 0px 8px 0px rgba(142,191,250,0.5);
-      -moz-box-shadow: 0px 0px 8px 0px rgba(142,191,250,0.5);
       box-shadow: 0px 0px 8px 0px rgba(142,191,250,0.5);
       .modalHeader {
         width: 100%;
@@ -87,7 +88,20 @@ export default {
 
 .modal-enter-active .modalContainer,
 .modal-leave-active .modalContainer {
-  -webkit-transform: scale(1.05);
+  transition: opacity .5s;
+  opacity: 1;
   transform: scale(1.05);
 }
+
+
+/*.modal-enter-active .modalContainer, .modal-leave-active .modalContainer {*/
+/*  opacity: 1;*/
+/*  transition: opacity 3.5s, transform 3.5s;*/
+/*  transform: scale(1);*/
+/*}*/
+/*.modal-enter, .modal-leave-to !* .fade-leave-active below version 2.1.8 *! {*/
+/*  opacity: 0;*/
+/*  transition: opacity 13.5s, transform 13.5s;*/
+/*  transform: scale(0.95);*/
+/*}*/
 </style>

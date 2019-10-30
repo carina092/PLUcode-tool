@@ -1,15 +1,19 @@
 <template>
   <div class="searchInput">
-    <Modal :visible="isModalOpen" @close="isModalOpen = false"/>
-
+    <Modal v-if="isModalOpen" @close="isModalOpen = false"></Modal>
     <div class="result">
-      <transition name="fade" mode="out-in">
-      <div class="productContainer" v-if="result" :key="result">
-        <div class="productId">{{ result.id }}</div>
-        <div class="productName">{{ result.name }} {{ result.type }} {{ result.data }}</div>
+      <transition name="fade">
+      <div class="productContainer"
+           v-for="preset in filterItems(presetData).slice(0, 1)"
+           :key="preset.presetName"
+           v-show="searchQuery != null || ''"
+      >
+        <div class="productId">{{ preset.id }}</div>
+        <div class="productName">{{ preset.presetName }} {{ preset.type }} {{ preset.data }}</div>
         <div class="productImage">
-          <img :src="result.img" />
+          <img :src="preset.img" />
         </div>
+
       </div>
       </transition>
     </div>
@@ -20,7 +24,7 @@
       placeholder="Please type in a PLU code or productname."
     />
     <div class="explanation">
-      <span @click="toggleModal">
+      <span @click="openModal">
           <font-awesome-icon icon="question-circle" />
           How does it work?
       </span>
@@ -29,7 +33,7 @@
 </template>
 
 <script>
-import products from '../assets/data';
+import presetData from '../assets/data';
 import Modal from './Modal.vue';
 
 export default {
@@ -40,21 +44,20 @@ export default {
   data() {
     return {
       searchQuery: null,
-      products,
+      presetData,
       isModalOpen: false,
     };
   },
-  computed: {
-    result() {
-      if (this.searchQuery === null || this.searchQuery === '') {
-        return false;
-      }
-      // eslint-disable-next-line max-len,no-shadow
-      return this.products.find(products => products.name.toLowerCase() === this.searchQuery.toLowerCase() || products.id.toString() === this.searchQuery);
-    },
-  },
   methods: {
-    toggleModal() {
+    filterItems(presets) {
+      const app = this;
+      if (app.searchQuery === null) {
+        return [];
+      }
+      // eslint-disable-next-line max-len
+      return presets.filter(preset => preset.presetName.toLowerCase() === this.searchQuery.toLowerCase() || preset.id.toString() === this.searchQuery);
+    },
+    openModal() {
       this.isModalOpen = !this.isModalOpen;
     },
   },
@@ -71,7 +74,7 @@ export default {
     .result {
       display: block;
       height: 600px;
-      margin: 40px 0;
+      padding: 40px 0;
       .productContainer {
         position: absolute;
         margin-left: auto;
@@ -111,13 +114,17 @@ export default {
       height: 50px;
       font-size: 18px;
       padding: 0 10px;
-      background-color: #fff;
       border: 1px solid #d4d4d4;
+      background-color: #fff;
       border-radius: 4px;
+      -webkit-box-shadow: 0px 0px 8px 0px rgba(142,191,250,0.5);
+      -moz-box-shadow: 0px 0px 8px 0px rgba(142,191,250,0.5);
       box-shadow: 0px 0px 8px 0px rgba(142,191,250,0.5);
       z-index: 999;
       &:focus {
         border: 1px solid #8ebffa;
+        -webkit-box-shadow: 0px 0px 10px 0px rgba(142,191,250,0.8);
+        -moz-box-shadow: 0px 0px 10px 0px rgba(142,191,250,0.8);
         box-shadow: 0px 0px 10px 0px rgba(142,191,250,0.8);
       }
       &::placeholder {
