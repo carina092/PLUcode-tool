@@ -4,27 +4,27 @@
 
     <div class="result">
       <transition name="fade" mode="out-in">
-<!--      <div class="productContainer" v-if="result" :key="result">-->
-<!--        <div class="productId">{{ result.id }}</div>-->
-<!--        <div class="productName">{{ result.name }} {{ result.type }} {{ result.data }}</div>-->
-<!--        <div class="productImage">-->
-<!--          <img :src="result.img" />-->
-<!--        </div>-->
-<!--      </div>-->
+      <div class="productContainer" v-if="results" :key="results">
+        <div class="productId">{{ results.id }}</div>
+        <div class="productName">{{ results.name }} {{ results.type }} {{ results.data }}</div>
+        <div class="productImage">
+          <img :src="results.img" />
+        </div>
+      </div>
       </transition>
     </div>
-    <span style="padding: 20px 0;">Output: {{ state }}</span>
+    <span style="padding: 20px 0;">SearchQuery output: {{ searchQuery }}</span>
     <input
-      v-model="state"
-      @input="filterStates"
+      v-model="searchQuery"
+      @input="filterResults"
       type="text"
       class="productInput"
       placeholder="Please type in a PLU code or productname."
       autocomplete="off"
     />
-    <div v-if="filteredStates">
+    <div v-if="filteredResults">
       <ul>
-        <li v-for="filteredState in filteredStates">{{ filteredState }}</li>
+        <li v-for="filteredResult in filteredResults">{{ filteredResult }}</li>
       </ul>
     </div>
     <div class="explanation">
@@ -37,30 +37,37 @@
 </template>
 
 <script>
-// import products from '../assets/data';
+import products from '../assets/data';
 import Modal from './Modal.vue';
 
 export default {
-  name: 'Calculator',
+  name: 'Autocomplete',
   components: {
     Modal,
   },
   data() {
     return {
+      searchQuery: null,
+      products,
       isModalOpen: false,
-      state: '',
-      states: [
-        'Florida', 'Alabama', 'Alaska', 'Texas',
-      ],
-      filteredStates: [],
+      filteredResults: [],
     };
   },
+  computed: {
+    results() {
+      if (this.searchQuery === null || this.searchQuery === '') {
+        return false;
+      }
+      // eslint-disable-next-line max-len,no-shadow
+      return this.products.find(products => products.name.toLowerCase() === this.searchQuery.toLowerCase() || products.id.toString() === this.searchQuery);
+    },
+  },
   methods: {
+    filterResults() {
+      this.filteredResults = this.searchQuery.filter(searchQuery => searchQuery.toLowerCase().startsWith(this.searchQuery.toLowerCase()));
+    },
     toggleModal() {
       this.isModalOpen = !this.isModalOpen;
-    },
-    filterStates() {
-      this.filteredStates = this.states.filter(state => state.toLowerCase().startsWith(this.state.toLowerCase()));
     },
   },
 };

@@ -1,18 +1,18 @@
 <template>
   <div class="pageContainer">
-    <Calculator />
+    <Autocomplete />
     <Footer />
   </div>
 </template>
 
 <script>
-import Calculator from '../components/Calculator.vue';
+import Autocomplete from '../components/Autocomplete.vue';
 import Footer from '../components/Footer.vue';
 
 export default {
   name: 'Index',
   components: {
-    Calculator,
+    Autocomplete,
     Footer,
   },
 };

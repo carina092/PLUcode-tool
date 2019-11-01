@@ -14,6 +14,13 @@ const products = [
     img: 'https://images.pexels.com/photos/9413/animal-cute-kitten-cat.jpg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   },
   {
+    id: 3,
+    name: 'Phoenix Rising',
+    type: 'Bathbomb',
+    data: '',
+    img: 'https://images.pexels.com/photos/1202481/pexels-photo-1202481.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+  },
+  {
     id: 4,
     name: 'Butterball',
     type: 'Bathbomb',
