@@ -14,7 +14,7 @@
     font-family: 'Helvetica', Arial, sans-serif;
     background-image: url('./assets/gradient.jpg');
     background-repeat: no-repeat;
-    backgorund-position: left top;
+    background-position: left top;
   }
 
   #app {

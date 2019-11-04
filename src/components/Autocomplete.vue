@@ -24,7 +24,10 @@
     />
     <div v-if="filteredResults">
       <ul>
-        <li v-for="filteredResult in filteredResults">{{ filteredResult }}</li>
+        <li
+          v-for="(filteredResult, index) in filteredResults"
+          :key="index"
+        >{{ filteredResult }}</li>
       </ul>
     </div>
     <div class="explanation">
