@@ -1,8 +1,18 @@
 <template>
-  <div class="dropdown">
-    <input type="text" v-model="searchText"/>
+  <div class="dropdown" :class="{'open' : open}">
+    <input type="text"
+           v-model="searchText"
+           @input="searchChanged"
+    />
+    <a class="toggle" @mousedown.prevent @click="setOpen(!open)">
+      <span class="arrow-up">▲</span>
+      <span class="arrow-down">▼</span>
+    </a>
     <ul class="suggestion-list">
-      <li v-for="(suggestion, index) in matches">
+      <li
+        v-for="(suggestion, index) in matches"
+        :key="index"
+      >
         {{ suggestion[0] }}
       </li>
     </ul>
@@ -22,14 +32,26 @@ export default {
   data() {
     return {
       searchText: '',
+      selectedOption: null,
+      open: false,
     };
   },
   computed: {
     matches() {
       return Object.entries(this.options).filter((option) => {
-        const optionText = option[0].toUpperCase();
-        return optionText.match(this.searchText.toUpperCase());
+        const optionText = option[0].toLowerCase();
+        return optionText.match(this.searchText.toLowerCase());
       });
+    },
+  },
+  methods: {
+    setOpen(isOpen) {
+      this.open = isOpen;
+    },
+    searchChanged() {
+      if (!this.open) {
+        this.open = true;
+      }
     },
   },
 };
@@ -37,7 +59,7 @@ export default {
 
 <style scoped lang="scss">
   input {
-    width: 100%;
+    width: 90%;
     height: 50px;
     font-size: 18px;
     padding: 0 10px;
@@ -62,7 +84,15 @@ export default {
   .dropdown {
     display: inline-block;
     position: relative;
-    width: 100%;
+    width: 90%;
+  }
+
+  .dropdown.open .suggestion-list {
+    display: block;
+  }
+
+  .dropdown .suggestion-list {
+    display: none;
   }
 
   .suggestion-list {
@@ -78,5 +108,17 @@ export default {
     top: 50px;
     left: 0;
     z-index: 2;
+  }
+
+  .toggle .arrow-up {
+    display: none;
+  }
+
+  .open .toggle .arrow-up {
+    display: inline-block;
+  }
+
+  .open .toggle .arrow-down {
+    display: none;
   }
 </style>
