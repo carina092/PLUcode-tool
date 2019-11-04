@@ -3,6 +3,7 @@
     <input type="text"
            v-model="searchText"
            @input="searchChanged"
+           placeholder="Please type in a PLU code or productname."
     />
     <a class="toggle" @mousedown.prevent @click="setOpen(!open)">
       <span class="arrow-up">▲</span>
@@ -12,6 +13,8 @@
       <li
         v-for="(suggestion, index) in matches"
         :key="index"
+        @mousedown.prevent
+        @click="suggestionSelected(suggestion)"
       >
         {{ suggestion[0] }}
       </li>
@@ -52,6 +55,11 @@ export default {
       if (!this.open) {
         this.open = true;
       }
+    },
+    suggestionSelected (suggestion) {
+      this.open = false;
+      this.searchText = suggestion[0];
+      this.$emit('input', suggestion[1])
     },
   },
 };
@@ -108,6 +116,13 @@ export default {
     top: 50px;
     left: 0;
     z-index: 2;
+    li {
+      cursor: pointer;
+      &:hover {
+        color: #fff;
+        background-color: #ccc;
+      }
+    }
   }
 
   .toggle .arrow-up {
