@@ -4,32 +4,29 @@
 
     <div class="result">
       <transition name="fade" mode="out-in">
-      <div class="productContainer" v-if="results" :key="results">
-        <div class="productId">{{ results.id }}</div>
-        <div class="productName">{{ results.name }} {{ results.type }} {{ results.data }}</div>
+      <div class="productContainer">
+        <div class="productId">{{ result.id }}</div>
+        <div class="productName">{{ result.name }} - {{ result.type }} - {{ result.attribute }}</div>
         <div class="productImage">
-          <img :src="results.img" />
+          <img :src="result.img" />
         </div>
       </div>
       </transition>
     </div>
-    <span style="padding: 20px 0;">SearchQuery output: {{ searchQuery }}</span>
     <input
       v-model="searchQuery"
-      @input="filterResults"
       type="text"
       class="productInput"
       placeholder="Please type in a PLU code or productname."
       autocomplete="off"
     />
-    <div v-if="filteredResults">
-      <ul>
-        <li
-          v-for="(filteredResult, index) in filteredResults"
-          :key="index"
-        >{{ filteredResult }}</li>
-      </ul>
-    </div>
+    <ul class="suggestions" v-if="suggestions.length > 0">
+      <li
+        v-for="(suggestion, index) in suggestions"
+        :key="index"
+        @click="searchQuery = suggestion.id + ' - ' + suggestion.name + ' ' + suggestion.type"
+      >{{ suggestion.id }} - {{suggestion.name}} {{ suggestion.type }} {{ suggestion.attribute }}</li>
+    </ul>
     <div class="explanation">
       <span @click="toggleModal">
           <font-awesome-icon icon="question-circle" />
@@ -53,22 +50,18 @@ export default {
       searchQuery: null,
       products,
       isModalOpen: false,
-      filteredResults: [],
     };
   },
   computed: {
-    results() {
-      if (this.searchQuery === null || this.searchQuery === '') {
-        return false;
-      }
-      // eslint-disable-next-line max-len,no-shadow
-      return this.products.find(products => products.name.toLowerCase() === this.searchQuery.toLowerCase() || products.id.toString() === this.searchQuery);
+    suggestions() {
+      if (!this.searchQuery) return [];
+
+      return this.products.filter(products =>
+        // eslint-disable-next-line max-len
+        products.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || products.id.toString().includes(this.searchQuery.toLowerCase()));
     },
   },
   methods: {
-    filterResults() {
-      this.filteredResults = this.searchQuery.filter(searchQuery => searchQuery.toLowerCase().startsWith(this.searchQuery.toLowerCase()));
-    },
     toggleModal() {
       this.isModalOpen = !this.isModalOpen;
     },
@@ -137,6 +130,28 @@ export default {
       }
       &::placeholder {
         color: #a4a4a4;
+      }
+    }
+    .suggestions {
+      width: 100%;
+      overflow: hidden;
+      display: block;
+      margin: 0;
+      padding: 10px 0;
+      list-style: none;
+      background-color: #fff;
+      border: 1px solid #d4d4d4;
+      border-radius: 0px 0px 4px 4px;
+      z-index: 998;
+      margin: -2px 0 0;
+      li {
+        padding: 7px 10px;
+        font-size: 16px;
+        &:hover {
+          cursor: pointer;
+          background-color: rgba(0, 0, 0, 0.05);
+          width: 100%;
+        }
       }
     }
     .explanation {

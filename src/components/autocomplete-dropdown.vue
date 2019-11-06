@@ -16,7 +16,7 @@
         @mousedown.prevent
         @click="suggestionSelected(suggestion)"
       >
-        {{ suggestion[0] }}
+         {{ suggestion }}
       </li>
     </ul>
   </div>
@@ -35,7 +35,6 @@ export default {
   data() {
     return {
       searchText: '',
-      selectedOption: null,
       open: false,
     };
   },
@@ -56,10 +55,11 @@ export default {
         this.open = true;
       }
     },
-    suggestionSelected (suggestion) {
+    suggestionSelected(suggestion) {
       this.open = false;
+      // eslint-disable-next-line prefer-destructuring
       this.searchText = suggestion[0];
-      this.$emit('input', suggestion[1])
+      this.$emit('input', suggestion[1]);
     },
   },
 };
@@ -93,6 +93,27 @@ export default {
     display: inline-block;
     position: relative;
     width: 90%;
+    .suggestion-list {
+      background-color: rgba(255, 255, 255, 0.95);
+      border: 1px solid #ddd;
+      list-style: none;
+      display: block;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow: hidden;
+      position: absolute;
+      top: 50px;
+      left: 0;
+      z-index: 2;
+      li {
+        cursor: pointer;
+        &:hover {
+          color: #fff;
+          background-color: #ccc;
+        }
+      }
+    }
   }
 
   .dropdown.open .suggestion-list {
@@ -101,28 +122,6 @@ export default {
 
   .dropdown .suggestion-list {
     display: none;
-  }
-
-  .suggestion-list {
-    background-color: rgba(255, 255, 255, 0.95);
-    border: 1px solid #ddd;
-    list-style: none;
-    display: block;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    overflow: hidden;
-    position: absolute;
-    top: 50px;
-    left: 0;
-    z-index: 2;
-    li {
-      cursor: pointer;
-      &:hover {
-        color: #fff;
-        background-color: #ccc;
-      }
-    }
   }
 
   .toggle .arrow-up {
