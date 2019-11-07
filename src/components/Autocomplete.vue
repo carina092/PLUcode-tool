@@ -4,11 +4,11 @@
 
     <div class="result">
       <transition name="fade" mode="out-in">
-      <div class="productContainer">
-        <div class="productId">{{ result.id }}</div>
-        <div class="productName">{{ result.name }} - {{ result.type }} - {{ result.attribute }}</div>
+      <div class="productContainer" v-if="currentResult !== null">
+        <div class="productId">{{ currentResult.id }}</div>
+        <div class="productName">{{ currentResult.name }} - {{ currentResult.type }} - {{ currentResult.attribute }}</div>
         <div class="productImage">
-          <img :src="result.img" />
+          <img :src="currentResult.img" />
         </div>
       </div>
       </transition>
@@ -24,8 +24,12 @@
       <li
         v-for="(suggestion, index) in suggestions"
         :key="index"
-        @click="searchQuery = suggestion.id + ' - ' + suggestion.name + ' ' + suggestion.type"
-      >{{ suggestion.id }} - {{suggestion.name}} {{ suggestion.type }} {{ suggestion.attribute }}</li>
+        @click="selectResult(suggestion.id)"
+        >
+      {{ suggestion.id }} - {{suggestion.name}} {{ suggestion.type }} {{ suggestion.attribute }}</li>
+      <li class="noResult" v-if="suggestions.length === 0">
+        No matches found. :(
+      </li>
     </ul>
     <div class="explanation">
       <span @click="toggleModal">
@@ -48,6 +52,7 @@ export default {
   data() {
     return {
       searchQuery: null,
+      currentResult: null,
       products,
       isModalOpen: false,
     };
@@ -57,13 +62,19 @@ export default {
       if (!this.searchQuery) return [];
 
       return this.products.filter(products =>
-        // eslint-disable-next-line max-len
+      // eslint-disable-next-line max-len
         products.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || products.id.toString().includes(this.searchQuery.toLowerCase()));
     },
   },
   methods: {
     toggleModal() {
       this.isModalOpen = !this.isModalOpen;
+    },
+    selectResult(id) {
+      this.currentResult = this.suggestions.find(suggestion => suggestion.id === id);
+      if (this.currentResult !== null) {
+        this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
+      }
     },
   },
 };
@@ -151,6 +162,12 @@ export default {
           cursor: pointer;
           background-color: rgba(0, 0, 0, 0.05);
           width: 100%;
+        }
+      }
+      .noResult {
+        &:hover {
+          cursor: default;
+          background-color: #fff;
         }
       }
     }
