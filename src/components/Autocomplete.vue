@@ -27,7 +27,9 @@
         @click="selectResult(suggestion.id)"
         >
       {{ suggestion.id }} - {{suggestion.name}} {{ suggestion.type }} {{ suggestion.attribute }}</li>
-      <li class="noResult" v-if="suggestions.length === 0">
+    </ul>
+    <ul class="suggestions" v-if="noResultsFound">
+      <li class="noResult">
         No matches found. :(
       </li>
     </ul>
@@ -61,9 +63,13 @@ export default {
     suggestions() {
       if (!this.searchQuery) return [];
 
+      // eslint-disable-next-line no-shadow
       return this.products.filter(products =>
-      // eslint-disable-next-line max-len
+      // eslint-disable-next-line max-len,implicit-arrow-linebreak
         products.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || products.id.toString().includes(this.searchQuery.toLowerCase()));
+    },
+    noResultsFound() {
+      return ((this.searchQuery !== '' && this.searchQuery !== null) && (this.suggestions.length === 0));
     },
   },
   methods: {
@@ -74,6 +80,13 @@ export default {
       this.currentResult = this.suggestions.find(suggestion => suggestion.id === id);
       if (this.currentResult !== null) {
         this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
+      }
+    },
+  },
+  watch: {
+    searchQuery() {
+      if (this.searchQuery === '') {
+        this.currentResult = null;
       }
     },
   },
