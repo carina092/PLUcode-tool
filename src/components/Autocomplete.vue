@@ -14,11 +14,11 @@
       </transition>
     </div>
     <input
-      v-model="searchQuery"
-      type="text"
-      class="productInput"
-      placeholder="Please type in a PLU code or productname."
-      autocomplete="off"
+            v-model="searchQuery"
+            type="text"
+            class="productInput"
+            placeholder="Please type in a PLU code or productname."
+            autocomplete="off"
     />
     <ul class="suggestions" v-if="suggestions.length > 0">
       <li
@@ -69,7 +69,14 @@ export default {
         products.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || products.id.toString().includes(this.searchQuery.toLowerCase()));
     },
     noResultsFound() {
-      return ((this.searchQuery !== '' && this.searchQuery !== null) && (this.suggestions.length === 0));
+      if (this.searchQuery !== '' && this.searchQuery !== null && this.suggestions.length < 1) {
+        return true;
+      }
+      if (this.currentResult === '' || this.currentResult === null) {
+        return false;
+      }
+      return false;
+      // return ((this.searchQuery !== '' && this.searchQuery !== null) && (this.suggestions.length === 0));
     },
   },
   methods: {
@@ -102,7 +109,7 @@ export default {
     height: 100%;
     .result {
       display: block;
-      height: 600px;
+      /*height: 600px;*/
       margin: 40px 0;
       .productContainer {
         position: absolute;
@@ -138,24 +145,25 @@ export default {
         height: 400px;
       }
     }
-    .productInput {
-      width: 100%;
-      height: 50px;
-      font-size: 18px;
-      padding: 0 10px;
-      background-color: #fff;
-      border: 1px solid #d4d4d4;
-      border-radius: 4px;
-      box-shadow: 0px 0px 8px 0px rgba(142,191,250,0.5);
-      z-index: 999;
-      &:focus {
-        border: 1px solid #8ebffa;
-        box-shadow: 0px 0px 10px 0px rgba(142,191,250,0.8);
+      .productInput {
+        display: block;
+        width: 100%;
+        height: 50px;
+        font-size: 18px;
+        padding: 0 10px;
+        background-color: #fff;
+        border: 1px solid #d4d4d4;
+        border-radius: 4px;
+        box-shadow: 0px 0px 8px 0px rgba(142,191,250,0.5);
+        z-index: 999;
+        &:focus {
+          border: 1px solid #8ebffa;
+          box-shadow: 0px 0px 10px 0px rgba(142,191,250,0.8);
+        }
+        &::placeholder {
+          color: #a4a4a4;
+        }
       }
-      &::placeholder {
-        color: #a4a4a4;
-      }
-    }
     .suggestions {
       width: 100%;
       overflow: hidden;
