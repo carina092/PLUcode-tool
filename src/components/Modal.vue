@@ -40,7 +40,7 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, .2);
   display: table;
-  /*transition: opacity .3s ease;*/
+  transition: opacity .3s ease;
   .modalWrapper {
     display: table-cell;
     vertical-align: middle;
@@ -51,7 +51,7 @@ export default {
       margin: 0px auto;
       padding: 20px;
       background-color: #fff;
-      /*transition: all .3s ease;*/
+      transition: all .3s ease;
       border: 1px solid #d4d4d4;
       border-radius: 4px;
       box-shadow: 0px 0px 8px 0px rgba(142,191,250,0.5);

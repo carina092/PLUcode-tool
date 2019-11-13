@@ -7,19 +7,39 @@
       <div class="productContainer" v-if="currentResult !== null">
         <div class="productId">{{ currentResult.id }}</div>
         <div class="productName">{{ currentResult.name }} - {{ currentResult.type }} - {{ currentResult.attribute }}</div>
-        <div class="productImage">
-          <img :src="currentResult.img" />
+        <div class="product">
+          <div class="productPrevious"
+               @click="showPreviousProduct"
+          >
+            <font-awesome-icon icon="chevron-left" />
+          </div>
+          <div class="productImage">
+            <img :src="currentResult.img" />
+          </div>
+          <div class="productNext"
+               @click="showNextProduct"
+          >
+            <font-awesome-icon icon="chevron-right" />
+          </div>
         </div>
       </div>
       </transition>
     </div>
-    <input
-            v-model="searchQuery"
-            type="text"
-            class="productInput"
-            placeholder="Please type in a PLU code or productname."
-            autocomplete="off"
-    />
+    <div class="inputContainer">
+      <input
+        v-model="searchQuery"
+        type="text"
+        class="productInput"
+        placeholder="Please type in a PLU code or productname."
+        autocomplete="off"
+      />
+      <div class="clearButton"
+           v-if="searchQuery != null"
+           @click="clearInput()"
+      >
+        <font-awesome-icon icon="times" />
+      </div>
+    </div>
     <ul class="suggestions" v-if="suggestions.length > 0">
       <li
         v-for="(suggestion, index) in suggestions"
@@ -28,11 +48,11 @@
         >
       {{ suggestion.id }} - {{suggestion.name}} {{ suggestion.type }} {{ suggestion.attribute }}</li>
     </ul>
-    <ul class="suggestions" v-if="noResultsFound">
-      <li class="noResult">
-        No matches found. :(
-      </li>
-    </ul>
+<!--    <ul class="suggestions" v-if="noResultsFound">-->
+<!--      <li class="noResult">-->
+<!--        No matches found. :(-->
+<!--      </li>-->
+<!--    </ul>-->
     <div class="explanation">
       <span @click="toggleModal">
           <font-awesome-icon icon="question-circle" />
@@ -68,16 +88,9 @@ export default {
       // eslint-disable-next-line max-len,implicit-arrow-linebreak
         products.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || products.id.toString().includes(this.searchQuery.toLowerCase()));
     },
-    noResultsFound() {
-      if (this.searchQuery !== '' && this.searchQuery !== null && this.suggestions.length < 1) {
-        return true;
-      }
-      if (this.currentResult === '' || this.currentResult === null) {
-        return false;
-      }
-      return false;
-      // return ((this.searchQuery !== '' && this.searchQuery !== null) && (this.suggestions.length === 0));
-    },
+    // noResultsFound() {
+    //   return false;
+    // },
   },
   methods: {
     toggleModal() {
@@ -88,6 +101,16 @@ export default {
       if (this.currentResult !== null) {
         this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
       }
+    },
+    clearInput() {
+      this.searchQuery = null;
+      this.currentResult = null;
+    },
+    showPreviousProduct() {
+      console.log('Previous Product: Clicked!');
+    },
+    showNextProduct() {
+      console.log('Next Product: Clicked!');
     },
   },
   watch: {
@@ -109,7 +132,7 @@ export default {
     height: 100%;
     .result {
       display: block;
-      /*height: 600px;*/
+      height: 600px;
       margin: 40px 0;
       .productContainer {
         position: absolute;
@@ -131,12 +154,26 @@ export default {
           color: #75A6E1;
           margin: 5px 0 20px 0;
         }
-        .productImage {
-          height: 400px;
-          overflow: hidden;
-          text-align: center;
-          img {
-            width: 400px;
+        .product {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          .productPrevious, .productNext {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: inherit;
+            width: 100px;
+            font-size: 48px;
+            color: #75A6E1;
+          }
+          .productImage {
+            height: 400px;
+            overflow: hidden;
+            text-align: center;
+            img {
+              width: 400px;
+            }
           }
         }
       }
@@ -145,12 +182,15 @@ export default {
         height: 400px;
       }
     }
+    .inputContainer {
+      position: relative;
       .productInput {
         display: block;
         width: 100%;
         height: 50px;
         font-size: 18px;
         padding: 0 10px;
+        color: #3b3b3b;
         background-color: #fff;
         border: 1px solid #d4d4d4;
         border-radius: 4px;
@@ -164,6 +204,20 @@ export default {
           color: #a4a4a4;
         }
       }
+      .clearButton {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 50px;
+        padding: 15px;
+        font-size: 18px;
+        color: #bbb;
+        &:hover {
+          color: #3b3b3b;
+          cursor: pointer;
+        }
+      }
+    }
     .suggestions {
       width: 100%;
       overflow: hidden;
