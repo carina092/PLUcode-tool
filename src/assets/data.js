@@ -7,6 +7,20 @@ const products = [
     img: 'https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   },
   {
+    id: 41,
+    name: 'Uluru',
+    type: 'Bathbomb',
+    attribute: '',
+    img: 'https://images.pexels.com/photos/38867/pexels-photo-38867.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+  },
+  {
+    id: 4,
+    name: 'Butterball',
+    type: 'Bathbomb',
+    attribute: '',
+    img: 'https://images.pexels.com/photos/320014/pexels-photo-320014.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+  },
+  {
     id: 2,
     name: 'Fizzy O Therapy',
     type: 'Bathbomb',
@@ -19,13 +33,6 @@ const products = [
     type: 'Bathbomb',
     attribute: '',
     img: 'https://images.pexels.com/photos/1202481/pexels-photo-1202481.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-  },
-  {
-    id: 4,
-    name: 'Butterball',
-    type: 'Bathbomb',
-    attribute: '',
-    img: 'https://images.pexels.com/photos/320014/pexels-photo-320014.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   },
   {
     id: 5,
@@ -49,6 +56,13 @@ const products = [
     img: 'https://images.pexels.com/photos/2071873/pexels-photo-2071873.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   },
   {
+    id: 131,
+    name: 'Aura Suavis',
+    type: 'Bubblebar',
+    attribute: '',
+    img: 'https://images.pexels.com/photos/208984/pexels-photo-208984.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+  },
+  {
     id: 15,
     name: 'Waving Not Drowning',
     type: 'Bathbomb',
@@ -63,18 +77,18 @@ const products = [
     img: 'https://images.pexels.com/photos/290164/pexels-photo-290164.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   },
   {
+    id: 1432,
+    name: 'B Never',
+    type: 'Showergel',
+    attribute: '250g',
+    img: 'https://images.pexels.com/photos/208984/pexels-photo-208984.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+  },
+  {
     id: 34,
     name: 'Honey Comfort',
     type: 'Bathbomb',
     attribute: '',
     img: 'https://images.pexels.com/photos/730896/pexels-photo-730896.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-  },
-  {
-    id: 41,
-    name: 'Uluru',
-    type: 'Bathbomb',
-    attribute: '',
-    img: 'https://images.pexels.com/photos/38867/pexels-photo-38867.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   },
   {
     id: 43,
@@ -91,24 +105,10 @@ const products = [
     img: 'https://images.pexels.com/photos/1056252/pexels-photo-1056252.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   },
   {
-    id: 131,
-    name: 'Aura Suavis',
-    type: 'Bubblebar',
-    attribute: '',
-    img: 'https://images.pexels.com/photos/208984/pexels-photo-208984.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-  },
-  {
     id: 1431,
     name: 'B Never',
     type: 'Showergel',
     attribute: '500g',
-    img: 'https://images.pexels.com/photos/208984/pexels-photo-208984.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-  },
-  {
-    id: 1432,
-    name: 'B Never',
-    type: 'Showergel',
-    attribute: '250g',
     img: 'https://images.pexels.com/photos/208984/pexels-photo-208984.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
   },
   {

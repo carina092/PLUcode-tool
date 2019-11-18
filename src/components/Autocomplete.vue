@@ -9,7 +9,7 @@
         <div class="productName">{{ currentResult.name }} - {{ currentResult.type }} - {{ currentResult.attribute }}</div>
         <div class="product">
           <div class="productPrevious"
-               @click="showPreviousProduct"
+               @click="previousIndex"
           >
             <font-awesome-icon icon="chevron-left" />
           </div>
@@ -48,11 +48,11 @@
         >
       {{ suggestion.id }} - {{suggestion.name}} {{ suggestion.type }} {{ suggestion.attribute }}</li>
     </ul>
-<!--    <ul class="suggestions" v-if="noResultsFound">-->
-<!--      <li class="noResult">-->
-<!--        No matches found. :(-->
-<!--      </li>-->
-<!--    </ul>-->
+    <ul class="suggestions" v-if="noResultsFound">
+      <li class="noResult">
+        No matches found. :(
+      </li>
+    </ul>
     <div class="explanation">
       <span @click="toggleModal">
           <font-awesome-icon icon="question-circle" />
@@ -88,9 +88,12 @@ export default {
       // eslint-disable-next-line max-len,implicit-arrow-linebreak
         products.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || products.id.toString().includes(this.searchQuery.toLowerCase()));
     },
-    // noResultsFound() {
-    //   return false;
-    // },
+    noResultsFound() {
+      const hasSearchQuery = !!this.searchQuery;
+      const hasNoResult = !this.currentResult;
+      const hasNoSuggestions = this.suggestions.length < 1;
+      return (hasSearchQuery && hasNoResult && hasNoSuggestions);
+    },
   },
   methods: {
     toggleModal() {
@@ -106,8 +109,20 @@ export default {
       this.searchQuery = null;
       this.currentResult = null;
     },
-    showPreviousProduct() {
-      console.log('Previous Product: Clicked!');
+    previousIndex() {
+      const productIds = this.products.map((product) => {
+        return product.id;
+      });
+      productIds.sort(function (a, b) {
+        return a - b;
+      });
+
+      const currentIndex = productIds.indexOf(this.currentResult.id);
+      const previousIndex = currentIndex - 1;
+      console.log('ID:', productIds);
+      console.log('Current Index:', currentIndex);
+      console.log('Previous Index:', previousIndex);
+      console.log('Current id:', this.currentResult.id);
     },
     showNextProduct() {
       console.log('Next Product: Clicked!');
