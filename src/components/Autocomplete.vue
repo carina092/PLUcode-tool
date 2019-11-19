@@ -9,7 +9,8 @@
         <div class="productName">{{ currentResult.name }} - {{ currentResult.type }} - {{ currentResult.attribute }}</div>
         <div class="product">
           <div class="productPrevious"
-               @click="previousIndex"
+               @click="previousIndex(currentResult.id)"
+               :disabled="disablePreviousIndex"
           >
             <font-awesome-icon icon="chevron-left" />
           </div>
@@ -17,7 +18,8 @@
             <img :src="currentResult.img" />
           </div>
           <div class="productNext"
-               @click="showNextProduct"
+               @click="nextIndex(currentResult.id)"
+               :disabled="disableNextIndex"
           >
             <font-awesome-icon icon="chevron-right" />
           </div>
@@ -80,11 +82,15 @@ export default {
     };
   },
   computed: {
+    sortedProductList() {
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      return this.products.sort((a, b) => ((a.id > b.id) ? 1 : -1));
+    },
     suggestions() {
       if (!this.searchQuery) return [];
 
       // eslint-disable-next-line no-shadow
-      return this.products.filter(products =>
+      return this.sortedProductList.filter(products =>
       // eslint-disable-next-line max-len,implicit-arrow-linebreak
         products.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || products.id.toString().includes(this.searchQuery.toLowerCase()));
     },
@@ -93,6 +99,17 @@ export default {
       const hasNoResult = !this.currentResult;
       const hasNoSuggestions = this.suggestions.length < 1;
       return (hasSearchQuery && hasNoResult && hasNoSuggestions);
+    },
+    disablePreviousIndex() {
+      return this.currentResult.id === 1;
+    },
+    disableNextIndex() {
+      console.log('currentResult', this.currentResult.id);
+      console.log('sortedProductList', this.sortedProductList.id);
+      if (this.currentResult.id === this.sortedProductList.length - 1) {
+        return true;
+      }
+      return false;
     },
   },
   methods: {
@@ -109,23 +126,21 @@ export default {
       this.searchQuery = null;
       this.currentResult = null;
     },
-    previousIndex() {
-      const productIds = this.products.map((product) => {
-        return product.id;
-      });
-      productIds.sort(function (a, b) {
-        return a - b;
-      });
-
-      const currentIndex = productIds.indexOf(this.currentResult.id);
+    previousIndex(id) {
+      if (this.disablePreviousIndex) return;
+      // eslint-disable-next-line max-len
+      const currentIndex = this.sortedProductList.findIndex(currentResult => currentResult.id === id);
       const previousIndex = currentIndex - 1;
-      console.log('ID:', productIds);
-      console.log('Current Index:', currentIndex);
-      console.log('Previous Index:', previousIndex);
-      console.log('Current id:', this.currentResult.id);
+      this.currentResult = this.sortedProductList[previousIndex];
+      this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
     },
-    showNextProduct() {
-      console.log('Next Product: Clicked!');
+    nextIndex(id) {
+      if (this.disableNextIndex) return;
+      // eslint-disable-next-line max-len
+      const currentIndex = this.sortedProductList.findIndex(currentResult => currentResult.id === id);
+      const previousIndex = currentIndex + 1;
+      this.currentResult = this.sortedProductList[previousIndex];
+      this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
     },
   },
   watch: {
@@ -180,7 +195,24 @@ export default {
             height: inherit;
             width: 100px;
             font-size: 48px;
-            color: #75A6E1;
+            &[disabled] {
+              .svg-inline--fa.fa-chevron-left.fa-w-10,
+              .svg-inline--fa.fa-chevron-right.fa-w-10 {
+                cursor: not-allowed;
+                color: #bbb;
+                &:hover {
+                  color: #bbb;
+                }
+              }
+            }
+            .svg-inline--fa.fa-chevron-left.fa-w-10,
+            .svg-inline--fa.fa-chevron-right.fa-w-10 {
+              cursor: pointer;
+              color: #8ebffa;
+              &:hover {
+                color: #75A6E1;
+              }
+            }
           }
           .productImage {
             height: 400px;

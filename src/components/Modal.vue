@@ -82,14 +82,13 @@ export default {
 }
 
 .modal-enter,
-.modal-leave-active {
+.modal-leave-to {
   opacity: 0;
 }
 
 .modal-enter-active .modalContainer,
 .modal-leave-active .modalContainer {
   transition: opacity .5s;
-  opacity: 1;
   transform: scale(1.05);
 }
 
