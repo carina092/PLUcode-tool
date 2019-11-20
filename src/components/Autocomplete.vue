@@ -101,15 +101,17 @@ export default {
       return (hasSearchQuery && hasNoResult && hasNoSuggestions);
     },
     disablePreviousIndex() {
+      if (this.currentResult === null) {
+        return false;
+      }
       return this.currentResult.id === 1;
     },
     disableNextIndex() {
-      console.log('currentResult', this.currentResult.id);
-      console.log('sortedProductList', this.sortedProductList.id);
-      if (this.currentResult.id === this.sortedProductList.length - 1) {
-        return true;
+      if (this.currentResult === null) {
+        return false;
       }
-      return false;
+      const lastItem = this.sortedProductList[this.sortedProductList.length - 1];
+      return this.currentResult.id === lastItem.id;
     },
   },
   methods: {
