@@ -81,6 +81,23 @@ export default {
       isModalOpen: false,
     };
   },
+  mounted() {
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        if (this.currentResult !== null) {
+          console.log('Links!');
+        }
+      }
+      if (e.key === 'ArrowRight') {
+        if (this.currentResult !== null) {
+          console.log('Rechts!');
+          console.log('NextIndex', this.nextIndex(this.currentResult.id));
+          console.log('CurrentID', this.currentResult.id);
+          this.nextIndex();
+        }
+      }
+    });
+  },
   computed: {
     sortedProductList() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
