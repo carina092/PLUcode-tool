@@ -3,29 +3,29 @@
     <Modal :visible="isModalOpen" @close="isModalOpen = false"/>
 
     <div class="result">
-      <transition name="fade" mode="out-in">
-      <div class="productContainer" v-if="currentResult !== null">
-        <div class="productId">{{ currentResult.id }}</div>
-        <div class="productName">{{ currentResult.name }} - {{ currentResult.type }} - {{ currentResult.attribute }}</div>
-        <div class="product">
-          <div class="productPrevious"
-               @click="previousIndex(currentResult.id)"
-               :disabled="disablePreviousIndex"
-          >
-            <font-awesome-icon icon="chevron-left" />
-          </div>
-          <div class="productImage">
-            <img :src="currentResult.img" />
-          </div>
-          <div class="productNext"
-               @click="nextIndex(currentResult.id)"
-               :disabled="disableNextIndex"
-          >
-            <font-awesome-icon icon="chevron-right" />
+      <transition-group name="fade" mode="out-in" appear tag="div">
+        <div class="productContainer" v-if="currentResult !== null" :key="currentResult.id">
+          <div class="productId">{{ currentResult.id }}</div>
+          <div class="productName">{{ currentResult.name }} - {{ currentResult.type }} - {{ currentResult.attribute }}</div>
+          <div class="product">
+            <div class="productPrevious"
+                 @click="showPreviousProduct"
+                 :disabled="disablePreviousIndex"
+            >
+              <font-awesome-icon icon="chevron-left" />
+            </div>
+            <div class="productImage">
+              <img :src="currentResult.img" />
+            </div>
+            <div class="productNext"
+                 @click="showNextProduct"
+                 :disabled="disableNextIndex"
+            >
+              <font-awesome-icon icon="chevron-right" />
+            </div>
           </div>
         </div>
-      </div>
-      </transition>
+      </transition-group>
     </div>
     <div class="inputContainer">
       <input
@@ -47,8 +47,8 @@
         v-for="(suggestion, index) in suggestions"
         :key="index"
         @click="selectResult(suggestion.id)"
-        >
-      {{ suggestion.id }} - {{suggestion.name}} {{ suggestion.type }} {{ suggestion.attribute }}</li>
+      >
+        {{ suggestion.id }} - {{suggestion.name}} {{ suggestion.type }} {{ suggestion.attribute }}</li>
     </ul>
     <ul class="suggestions" v-if="noResultsFound">
       <li class="noResult">
@@ -81,33 +81,25 @@ export default {
       isModalOpen: false,
     };
   },
-  mounted() {
+  created() {
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') {
-        if (this.currentResult !== null) {
-          console.log('Links!');
-        }
-      }
-      if (e.key === 'ArrowRight') {
-        if (this.currentResult !== null) {
-          console.log('Rechts!');
-          console.log('NextIndex', this.nextIndex(this.currentResult.id));
-          console.log('CurrentID', this.currentResult.id);
-          this.nextIndex();
-        }
+      switch (e.keyCode) {
+        case 37: return this.showPreviousProduct(); break;
+        case 38: return console.log('38'); break;
+        case 39: return this.showNextProduct(); break;
+        case 40: return console.log('40'); break;
       }
     });
   },
   computed: {
-    sortedProductList() {
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      return this.products.sort((a, b) => ((a.id > b.id) ? 1 : -1));
+    sortedProducts() {
+      return [...this.products].sort((a, b) => (a.id > b.id ? 1 : -1));
     },
     suggestions() {
       if (!this.searchQuery) return [];
 
       // eslint-disable-next-line no-shadow
-      return this.sortedProductList.filter(products =>
+      return this.sortedProducts.filter(products =>
       // eslint-disable-next-line max-len,implicit-arrow-linebreak
         products.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || products.id.toString().includes(this.searchQuery.toLowerCase()));
     },
@@ -116,6 +108,10 @@ export default {
       const hasNoResult = !this.currentResult;
       const hasNoSuggestions = this.suggestions.length < 1;
       return (hasSearchQuery && hasNoResult && hasNoSuggestions);
+    },
+    currentResultIndex() {
+      if (this.searchQuery === null) { return false; }
+      return this.sortedProducts.findIndex(product => product.id === this.currentResult.id);
     },
     disablePreviousIndex() {
       if (this.currentResult === null) {
@@ -127,7 +123,7 @@ export default {
       if (this.currentResult === null) {
         return false;
       }
-      const lastItem = this.sortedProductList[this.sortedProductList.length - 1];
+      const lastItem = this.sortedProducts[this.sortedProducts.length - 1];
       return this.currentResult.id === lastItem.id;
     },
   },
@@ -145,20 +141,14 @@ export default {
       this.searchQuery = null;
       this.currentResult = null;
     },
-    previousIndex(id) {
-      if (this.disablePreviousIndex) return;
-      // eslint-disable-next-line max-len
-      const currentIndex = this.sortedProductList.findIndex(currentResult => currentResult.id === id);
-      const previousIndex = currentIndex - 1;
-      this.currentResult = this.sortedProductList[previousIndex];
+    showPreviousProduct() {
+      if (this.currentResultIndex === 0) return;
+      this.currentResult = this.sortedProducts[this.currentResultIndex - 1];
       this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
     },
-    nextIndex(id) {
-      if (this.disableNextIndex) return;
-      // eslint-disable-next-line max-len
-      const currentIndex = this.sortedProductList.findIndex(currentResult => currentResult.id === id);
-      const previousIndex = currentIndex + 1;
-      this.currentResult = this.sortedProductList[previousIndex];
+    showNextProduct() {
+      if (this.currentResultIndex === this.sortedProducts.length - 1) return;
+      this.currentResult = this.sortedProducts[this.currentResultIndex + 1];
       this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
     },
   },
@@ -321,6 +311,14 @@ export default {
       }
     }
   }
+
+  /*.fade-enter-active, .fade-leave-active {*/
+  /*   transition: opacity .5s;*/
+  /* }*/
+
+  /* .fade-enter, .fade-leave-to !* .fade-leave-active below version 2.1.8 *! {*/
+  /*   opacity: 0;*/
+  /* }*/
 
   .fade-enter-active, .fade-leave-active {
     transition: opacity .5s;
