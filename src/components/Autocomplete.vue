@@ -47,6 +47,8 @@
         v-for="(suggestion, index) in suggestions"
         :key="index"
         @click="selectResult(suggestion.id)"
+        :class='{"highlightedItem": highlightedItem === suggestion.id}'
+        @keyup='nextItem'
       >
         {{ suggestion.id }} - {{suggestion.name}} {{ suggestion.type }} {{ suggestion.attribute }}</li>
     </ul>
@@ -79,17 +81,20 @@ export default {
       currentResult: null,
       products,
       isModalOpen: false,
+      highlightedItem: 1,
     };
   },
   created() {
     window.addEventListener('keydown', (e) => {
+      // eslint-disable-next-line default-case
       switch (e.keyCode) {
         case 37: return this.showPreviousProduct(); break;
-        case 38: return console.log('38'); break;
         case 39: return this.showNextProduct(); break;
-        case 40: return console.log('40'); break;
       }
     });
+  },
+  mounted() {
+    document.addEventListener('keyup', this.nextItem);
   },
   computed: {
     sortedProducts() {
@@ -142,14 +147,21 @@ export default {
       this.currentResult = null;
     },
     showPreviousProduct() {
-      if (this.currentResultIndex === 0) return;
+      if (this.currentResultIndex === 0 || this.searchQuery === null) return;
       this.currentResult = this.sortedProducts[this.currentResultIndex - 1];
       this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
     },
     showNextProduct() {
-      if (this.currentResultIndex === this.sortedProducts.length - 1) return;
+      if (this.currentResultIndex === this.sortedProducts.length - 1 || this.searchQuery === null) return;
       this.currentResult = this.sortedProducts[this.currentResultIndex + 1];
       this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
+    },
+    nextItem() {
+      if (event.keyCode == 38 && this.highlightedItem > 1) {
+        this.highlightedItem--;
+      } else if (event.keyCode == 40 && this.highlightedItem) {
+        this.highlightedItem++;
+      }
     },
   },
   watch: {
@@ -309,6 +321,12 @@ export default {
         color: #8ebffa;
         cursor: pointer;
       }
+    }
+
+    .highlightedItem {
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.05);
+      width: 100%;
     }
   }
 
