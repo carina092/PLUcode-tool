@@ -1,7 +1,6 @@
 <template>
   <div class="searchInput">
     <Modal :visible="isModalOpen" @close="isModalOpen = false"/>
-
     <div class="result">
       <transition-group name="fade" mode="out-in" appear tag="div">
         <div class="productContainer" v-if="currentResult !== null" :key="currentResult.id">
@@ -47,7 +46,7 @@
         v-for="(suggestion, index) in suggestions"
         :key="index"
         @click="selectResult(suggestion.id)"
-        :class='{"highlightedItem": highlightedItem === suggestion.id}'
+        :class="{ 'highlightedItem': suggestion.id === highlightedResult.id }"
         @keyup='nextItem'
       >
         {{ suggestion.id }} - {{suggestion.name}} {{ suggestion.type }} {{ suggestion.attribute }}</li>
@@ -81,7 +80,7 @@ export default {
       currentResult: null,
       products,
       isModalOpen: false,
-      highlightedItem: 1,
+      highlightedItem: 0,
     };
   },
   created() {
@@ -115,7 +114,7 @@ export default {
       return (hasSearchQuery && hasNoResult && hasNoSuggestions);
     },
     currentResultIndex() {
-      if (this.searchQuery === null) { return false; }
+      if (this.searchQuery === null || this.currentResult === null) { return false; }
       return this.sortedProducts.findIndex(product => product.id === this.currentResult.id);
     },
     disablePreviousIndex() {
@@ -130,6 +129,9 @@ export default {
       }
       const lastItem = this.sortedProducts[this.sortedProducts.length - 1];
       return this.currentResult.id === lastItem.id;
+    },
+    highlightedResult() {
+      return this.suggestions[this.highlightedItem];
     },
   },
   methods: {
@@ -157,10 +159,13 @@ export default {
       this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
     },
     nextItem() {
-      if (event.keyCode == 38 && this.highlightedItem > 1) {
+      // eslint-disable-next-line no-restricted-globals
+      if (event.keyCode === 38 && this.highlightedItem > 0) {
+        // eslint-disable-next-line no-plusplus
         this.highlightedItem--;
-      } else if (event.keyCode == 40 && this.highlightedItem) {
-        this.highlightedItem++;
+        // eslint-disable-next-line no-restricted-globals
+      } else if (event.keyCode === 40) {
+        this.highlightedItem = (this.highlightedItem + 1) % this.suggestions.length;
       }
     },
   },
