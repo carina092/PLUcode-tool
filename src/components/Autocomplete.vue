@@ -167,6 +167,12 @@ export default {
       } else if (event.keyCode === 40) {
         this.highlightedItem = (this.highlightedItem + 1) % this.suggestions.length;
       }
+      if (event.keyCode === 13 && this.highlightedItem > 0) {
+        this.currentResult = this.highlightedResult;
+        if (this.currentResult !== null) {
+          this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
+        }
+      } return false;
     },
   },
   watch: {
