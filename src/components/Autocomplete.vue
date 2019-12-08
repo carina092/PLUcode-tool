@@ -14,7 +14,7 @@
               <font-awesome-icon icon="chevron-left" />
             </div>
             <div class="productImage">
-              <img :src="currentResult.img" />
+              <img :src="currentResult.img"/>
             </div>
             <div class="productNext"
                  @click="showNextProduct"
@@ -66,13 +66,23 @@
 </template>
 
 <script>
-import products from '../assets/data';
+ import {db} from '../firebase.js';
+// import products from '../assets/data';
 import Modal from './Modal.vue';
 
 export default {
   name: 'Autocomplete',
   components: {
     Modal,
+  },
+  firebase: {
+    products: {
+      source: db.ref('products'),
+      // Optional, allows you to handle any errors.
+      cancelCallback(err) {
+        console.error(err);
+      }
+    }
   },
   data() {
     return {

@@ -2,10 +2,10 @@ import Vue from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VueFire from 'vuefire';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import vuetify from './plugins/vuetify'; // path to vuetify export
 
 library.add(fas);
 
@@ -16,6 +16,6 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
-  vuetify,
+  VueFire,
   render: h => h(App),
 }).$mount('#app');
