@@ -5,7 +5,7 @@
       <transition-group name="fade" mode="out-in" appear tag="div">
         <div class="productContainer" v-if="currentResult !== null" :key="currentResult.id">
           <div class="productId">{{ currentResult.id }}</div>
-          <div class="productName">{{ currentResult.name }} - {{ currentResult.type }} - {{ currentResult.attribute }}</div>
+          <div class="productName">{{ currentResult.name }} {{ currentResult.type }} {{ currentResult.attribute }}</div>
           <div class="product">
             <div class="productPrevious"
                  @click="showPreviousProduct"
@@ -27,13 +27,15 @@
       </transition-group>
     </div>
     <div class="inputContainer">
-      <input
-        v-model="searchQuery"
-        type="text"
-        class="productInput"
-        placeholder="Please type in a PLU code or productname."
-        autocomplete="off"
-      />
+      <label>
+        <input
+          v-model="searchQuery"
+          type="text"
+          class="productInput"
+          placeholder="Please type in a PLU code or productname."
+          autocomplete="off"
+        />
+      </label>
       <div class="clearButton"
            v-if="searchQuery != null"
            @click="clearInput()"
@@ -66,8 +68,7 @@
 </template>
 
 <script>
- import {db} from '../firebase.js';
-// import products from '../assets/data';
+import { db } from '../firebase';
 import Modal from './Modal.vue';
 
 export default {
@@ -78,22 +79,25 @@ export default {
   firebase: {
     products: {
       source: db.ref('products'),
-      // Optional, allows you to handle any errors.
       cancelCallback(err) {
         console.error(err);
-      }
-    }
+      },
+    },
   },
   data() {
     return {
       searchQuery: null,
       currentResult: null,
-      products,
+      products: [],
       isModalOpen: false,
       highlightedItem: 0,
     };
   },
   created() {
+    db.ref('products').once('value',
+      (storedValue) => {
+        this.products = storedValue.val();
+      });
     window.addEventListener('keydown', (e) => {
       // eslint-disable-next-line default-case
       switch (e.keyCode) {
@@ -224,7 +228,10 @@ export default {
           font-weight: bold;
           text-align: center;
           color: #75A6E1;
-          margin: 5px 0 20px 0;
+          margin: 5px auto 20px auto;
+          width: 100%;
+          max-width: 600px;
+          line-height: 1.4;
         }
         .product {
           display: flex;
@@ -275,7 +282,7 @@ export default {
       position: relative;
       .productInput {
         display: block;
-        width: 100%;
+        width: calc(100% - 21px);
         height: 50px;
         font-size: 18px;
         padding: 0 10px;
@@ -297,8 +304,7 @@ export default {
         position: absolute;
         top: 0;
         right: 0;
-        height: 50px;
-        padding: 15px;
+        margin: 16px;
         font-size: 18px;
         color: #bbb;
         &:hover {
@@ -309,9 +315,11 @@ export default {
     }
     .suggestions {
       width: 100%;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      height: 100%;
+      max-height: 200px;
       display: block;
-      margin: 0;
       padding: 10px 0;
       list-style: none;
       background-color: #fff;
