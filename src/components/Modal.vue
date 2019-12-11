@@ -86,21 +86,12 @@ export default {
   opacity: 0;
 }
 
-.modal-enter-active .modalContainer,
-.modal-leave-active .modalContainer {
+.modal-enter-active .modalContainer {
   transition: opacity .5s;
-  transform: scale(1.05);
+  transform: scale(1.10);
 }
 
-
-/*.modal-enter-active .modalContainer, .modal-leave-active .modalContainer {*/
-/*  opacity: 1;*/
-/*  transition: opacity 3.5s, transform 3.5s;*/
-/*  transform: scale(1);*/
-/*}*/
-/*.modal-enter, .modal-leave-to !* .fade-leave-active below version 2.1.8 *! {*/
-/*  opacity: 0;*/
-/*  transition: opacity 13.5s, transform 13.5s;*/
-/*  transform: scale(0.95);*/
-/*}*/
+.modal-leave-to {
+  transition: opacity .5s;
+}
 </style>

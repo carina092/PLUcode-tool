@@ -27,4 +27,8 @@
     height: 100%;
     width: 100%;
   }
+
+  *:focus {
+    outline: none;
+  }
 </style>

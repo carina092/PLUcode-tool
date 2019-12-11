@@ -29,7 +29,7 @@
     <div class="inputContainer">
       <label>
         <input
-          v-model="searchQuery"
+          v-model="debouncedSearchQuery"
           type="text"
           class="productInput"
           placeholder="Please type in a PLU code or productname."
@@ -68,6 +68,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import { db } from '../firebase';
 import Modal from './Modal.vue';
 
@@ -101,6 +102,7 @@ export default {
     window.addEventListener('keydown', (e) => {
       // eslint-disable-next-line default-case
       switch (e.keyCode) {
+        case 27: return this.clearInput(); break;
         case 37: return this.showPreviousProduct(); break;
         case 39: return this.showNextProduct(); break;
       }
@@ -113,9 +115,16 @@ export default {
     sortedProducts() {
       return [...this.products].sort((a, b) => (a.id > b.id ? 1 : -1));
     },
+    debouncedSearchQuery: {
+      get() {
+        return this.searchQuery;
+      },
+      set: _.debounce(function (newValue) {
+        this.searchQuery = newValue;
+      }, 500),
+    },
     suggestions() {
       if (!this.searchQuery) return [];
-
       // eslint-disable-next-line no-shadow
       return this.sortedProducts.filter(products =>
       // eslint-disable-next-line max-len,implicit-arrow-linebreak
@@ -161,6 +170,7 @@ export default {
     clearInput() {
       this.searchQuery = null;
       this.currentResult = null;
+      this.highlightedItem = 0;
     },
     showPreviousProduct() {
       if (this.currentResultIndex === 0 || this.searchQuery === null) return;
@@ -181,7 +191,7 @@ export default {
       } else if (event.keyCode === 40) {
         this.highlightedItem = (this.highlightedItem + 1) % this.suggestions.length;
       }
-      if (event.keyCode === 13 && this.highlightedItem > 0) {
+      if (event.keyCode === 13 && this.highlightedItem > -1) {
         this.currentResult = this.highlightedResult;
         if (this.currentResult !== null) {
           this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
@@ -208,7 +218,8 @@ export default {
     height: 100%;
     .result {
       display: block;
-      height: 600px;
+      height: 100%;
+      max-height: 600px;
       margin: 40px 0;
       .productContainer {
         position: absolute;
@@ -280,6 +291,7 @@ export default {
     }
     .inputContainer {
       position: relative;
+      display: block;
       .productInput {
         display: block;
         width: calc(100% - 21px);
@@ -317,7 +329,7 @@ export default {
       width: 100%;
       overflow-x: hidden;
       overflow-y: scroll;
-      height: 100%;
+      height: auto;
       max-height: 200px;
       display: block;
       padding: 10px 0;
@@ -345,6 +357,7 @@ export default {
     }
     .explanation {
       padding: 12px 10px;
+      margin: 0 0 40px 0;
       span {
         font-size: 14px;
         color: #8ebffa;
