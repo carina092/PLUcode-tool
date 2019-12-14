@@ -1,6 +1,46 @@
 <template>
-  <div class="searchInput">
+  <div class="searchInput"
+       :class="{ 'activeResult': currentResult !== null }"
+  >
     <Modal :visible="isModalOpen" @close="isModalOpen = false"/>
+    <div class="inputContainer">
+      <label>
+        <input
+                v-model="debouncedSearchQuery"
+                type="text"
+                class="productInput"
+                placeholder="Please type in a PLU code or productname."
+                autocomplete="off"
+        />
+      </label>
+      <div class="clearButton"
+           v-if="searchQuery != null"
+           @click="clearInput()"
+      >
+        <font-awesome-icon icon="times" />
+      </div>
+    </div>
+    <ul class="suggestions" v-if="suggestions.length > 0">
+      <li
+              v-for="(suggestion, index) in suggestions"
+              :key="index"
+              @click="selectResult(suggestion.id)"
+              :class="{ 'highlightedItem': suggestion.id === highlightedResult.id }"
+              @keyup='nextItem'
+      >
+        {{ suggestion.id }} - {{suggestion.name}} {{ suggestion.type }} {{ suggestion.attribute }}</li>
+    </ul>
+    <ul class="suggestions" v-if="noResultsFound">
+      <li class="noResult">
+        No matches found. :(
+      </li>
+    </ul>
+    <div class="explanation">
+      <span @click="toggleModal">
+          <font-awesome-icon icon="question-circle" />
+          How does it work?
+      </span>
+    </div>
     <div class="result">
       <transition-group name="fade" mode="out-in" appear tag="div">
         <div class="productContainer" v-if="currentResult !== null" :key="currentResult.id">
@@ -25,47 +65,6 @@
           </div>
         </div>
       </transition-group>
-    </div>
-    <div
-      class="inputContainer"
-      :class="{ 'activeResult': currentResult !== null }"
-    >
-      <label>
-        <input
-          v-model="debouncedSearchQuery"
-          type="text"
-          class="productInput"
-          placeholder="Please type in a PLU code or productname."
-          autocomplete="off"
-        />
-      </label>
-      <div class="clearButton"
-           v-if="searchQuery != null"
-           @click="clearInput()"
-      >
-        <font-awesome-icon icon="times" />
-      </div>
-    </div>
-    <ul class="suggestions" v-if="suggestions.length > 0">
-      <li
-        v-for="(suggestion, index) in suggestions"
-        :key="index"
-        @click="selectResult(suggestion.id)"
-        :class="{ 'highlightedItem': suggestion.id === highlightedResult.id }"
-        @keyup='nextItem'
-      >
-        {{ suggestion.id }} - {{suggestion.name}} {{ suggestion.type }} {{ suggestion.attribute }}</li>
-    </ul>
-    <ul class="suggestions" v-if="noResultsFound">
-      <li class="noResult">
-        No matches found. :(
-      </li>
-    </ul>
-    <div class="explanation">
-      <span @click="toggleModal">
-          <font-awesome-icon icon="question-circle" />
-          How does it work?
-      </span>
     </div>
   </div>
 </template>
@@ -176,12 +175,16 @@ export default {
       this.highlightedItem = 0;
     },
     showPreviousProduct() {
-      if (this.currentResultIndex === 0 || this.searchQuery === null) return;
+      if (this.currentResultIndex === 0 || this.searchQuery === null) {
+        return
+      }
       this.currentResult = this.sortedProducts[this.currentResultIndex - 1];
       this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
     },
     showNextProduct() {
-      if (this.currentResultIndex === this.sortedProducts.length - 1 || this.searchQuery === null) return;
+      if (this.currentResultIndex === this.sortedProducts.length - 1 || this.searchQuery === null) {
+        return
+      }
       this.currentResult = this.sortedProducts[this.currentResultIndex + 1];
       this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
     },
@@ -194,7 +197,7 @@ export default {
       } else if (event.keyCode === 40) {
         this.highlightedItem = (this.highlightedItem + 1) % this.suggestions.length;
       }
-      if (event.keyCode === 13 && this.highlightedItem > -1) {
+      if (event.keyCode === 13 && this.highlightedItem >= 0) {
         this.currentResult = this.highlightedResult;
         if (this.currentResult !== null) {
           this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
@@ -219,11 +222,19 @@ export default {
     margin: 0 auto;
     max-width: 600px;
     height: 100%;
-    .result {
+    &.activeResult > .result {
       display: block;
-      height: 100%;
-      max-height: 600px;
       margin: 40px 0;
+    }
+    &.activeResult > .inputContainer { /* Todo: Transition */
+      top: 0;
+      margin: 40px 0 0 0;
+    }
+    &.activeResult > .explanation {
+      top: 0;
+    }
+    .result {
+      display: none;
       .productContainer {
         position: absolute;
         margin-left: auto;
@@ -295,6 +306,7 @@ export default {
     .inputContainer {
       position: relative;
       display: block;
+      top: 50%;
       .productInput {
         display: block;
         width: calc(100% - 21px);
@@ -329,6 +341,8 @@ export default {
       }
     }
     .suggestions {
+      position: relative;
+      top: 50%;
       width: 100%;
       overflow-x: hidden;
       overflow-y: scroll;
@@ -359,8 +373,10 @@ export default {
       }
     }
     .explanation {
+      position: relative;
+      top: 50%;
       padding: 12px 10px;
-      margin: 0 0 40px 0;
+      margin: 0 0 20px 0; /* Todo: Responsive */
       span {
         font-size: 14px;
         color: #8ebffa;
