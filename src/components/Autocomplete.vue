@@ -176,14 +176,14 @@ export default {
     },
     showPreviousProduct() {
       if (this.currentResultIndex === 0 || this.searchQuery === null) {
-        return
+        return;
       }
       this.currentResult = this.sortedProducts[this.currentResultIndex - 1];
       this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
     },
     showNextProduct() {
       if (this.currentResultIndex === this.sortedProducts.length - 1 || this.searchQuery === null) {
-        return
+        return;
       }
       this.currentResult = this.sortedProducts[this.currentResultIndex + 1];
       this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
@@ -226,7 +226,7 @@ export default {
       display: block;
       margin: 40px 0;
     }
-    &.activeResult > .inputContainer { /* Todo: Transition */
+    &.activeResult > .inputContainer {
       top: 0;
       margin: 40px 0 0 0;
     }
@@ -307,6 +307,8 @@ export default {
       position: relative;
       display: block;
       top: 50%;
+      transition: all 1.5s ease;
+      z-index: 9999;
       .productInput {
         display: block;
         width: calc(100% - 21px);
@@ -377,6 +379,7 @@ export default {
       top: 50%;
       padding: 12px 10px;
       margin: 0 0 20px 0; /* Todo: Responsive */
+      transition: all 1.5s ease;
       span {
         font-size: 14px;
         color: #8ebffa;
