@@ -222,9 +222,10 @@ export default {
     margin: 0 auto;
     max-width: 600px;
     height: 100%;
+    transition: all 0.4s ease;
     &.activeResult > .result {
       display: block;
-      margin: 40px 0;
+      height: inherit;
     }
     &.activeResult > .inputContainer {
       top: 0;
@@ -235,6 +236,7 @@ export default {
     }
     .result {
       display: none;
+      transition: all 0.4s ease;
       .productContainer {
         position: absolute;
         margin-left: auto;
@@ -247,6 +249,7 @@ export default {
           text-align: center;
           color: #8ebffa;
           text-shadow: 2px 2px #75A6E1;
+          transition: all 0.4s ease;
         }
         .productName {
           font-size: 32px;
@@ -257,6 +260,7 @@ export default {
           width: 100%;
           max-width: 600px;
           line-height: 1.4;
+          transition: all 0.4s ease;
         }
         .product {
           display: flex;
@@ -269,6 +273,7 @@ export default {
             height: inherit;
             width: 100px;
             font-size: 48px;
+            transition: all 0.4s ease;
             &[disabled] {
               .svg-inline--fa.fa-chevron-left.fa-w-10,
               .svg-inline--fa.fa-chevron-right.fa-w-10 {
@@ -292,15 +297,12 @@ export default {
             height: 400px;
             overflow: hidden;
             text-align: center;
+            transition: all 0.4s ease;
             img {
               width: 400px;
             }
           }
         }
-      }
-      .image {
-        width: 400px;
-        height: 400px;
       }
     }
     .inputContainer {
@@ -308,7 +310,7 @@ export default {
       display: block;
       top: 50%;
       transition: all 1.5s ease;
-      z-index: 9999;
+      z-index: 9990;
       .productInput {
         display: block;
         width: calc(100% - 21px);
@@ -321,12 +323,14 @@ export default {
         border-radius: 4px;
         box-shadow: 0px 0px 8px 0px rgba(142,191,250,0.5);
         z-index: 999;
+        transition: all 0.4s ease;
         &:focus {
           border: 1px solid #8ebffa;
           box-shadow: 0px 0px 10px 0px rgba(142,191,250,0.8);
         }
         &::placeholder {
           color: #a4a4a4;
+          max-width: 90%;
         }
       }
       .clearButton {
@@ -378,12 +382,13 @@ export default {
       position: relative;
       top: 50%;
       padding: 12px 10px;
-      margin: 0 0 20px 0; /* Todo: Responsive */
       transition: all 1.5s ease;
+      z-index: 9990;
       span {
         font-size: 14px;
         color: #8ebffa;
         cursor: pointer;
+        transition: all 0.4s ease;
       }
     }
 
@@ -400,5 +405,273 @@ export default {
 
   .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
     opacity: 0;
+  }
+
+  /* Responsive */
+
+  @media screen and (max-height: 820px) {
+    .result {
+      margin: -20px 0 0 0;
+      .productContainer {
+        .productId {
+          font-size: 110px !important;
+        }
+        .product {
+          .productImage {
+            height: 350px !important;
+            img {
+              width: 350px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-height: 720px) {
+    .result {
+      .productContainer {
+        .productId {
+          font-size: 100px !important;
+        }
+        .productName {
+          font-size: 28px !important;
+          margin: 0 auto 10px auto !important;
+        }
+        .product {
+          .productImage {
+            height: 350px !important;
+            img {
+              width: 350px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-height: 680px) {
+    .explanation {
+      padding: 8px 10px !important;
+      span {
+        font-size: 12px !important;
+      }
+    }
+    .result {
+      .productContainer {
+        .productId {
+          font-size: 100px !important;
+        }
+        .productName {
+          font-size: 28px !important;
+          margin: 0 auto 10px auto !important;
+        }
+        .product {
+          .productImage {
+            height: 300px !important;
+            img {
+              width: 300px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 680px) {
+    .searchInput,
+    .result {
+      max-width: 90% !important;
+    }
+  }
+
+  @media screen and (max-height: 620px) {
+    .result {
+      .productContainer {
+        .productId {
+          font-size: 90px !important;
+        }
+        .productName {
+          font-size: 24px !important;
+          margin: 0 auto 10px auto !important;
+        }
+        .product {
+          .productImage {
+            height: 275px !important;
+            img {
+              width: 275px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 620px) {
+    .result {
+      .productContainer {
+        .productName {
+          max-width: 90% !important;
+        }
+        .product {
+          .productImage {
+            height: 350px !important;
+            img {
+              width: 350px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 580px) {
+    .result {
+      .productContainer {
+        .productId {
+          font-size: 100px !important;
+        }
+        .productName {
+          font-size: 28px !important;
+        }
+        .product {
+          .productImage {
+            height: 300px !important;
+            img {
+              width: 300px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .result {
+      .productContainer {
+        .product {
+          .productImage {
+            height: 275px !important;
+            img {
+              width: 275px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .result {
+      .productContainer {
+        .productId {
+          font-size: 100px !important;
+        }
+        .productName {
+          font-size: 24px !important;
+        }
+        .product {
+          .productPrevious, .productNext {
+            width: 75px !important;
+          }
+          .productImage {
+            height: 275px !important;
+            img {
+              width: 275px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 420px) {
+    .inputContainer {
+      .productInput {
+        font-size: 16px !important;
+      }
+    }
+    .explanation {
+      padding: 8px 10px 20px 10px !important;
+      span {
+        font-size: 12px !important;
+      }
+    }
+    .result {
+      .productContainer {
+        .product {
+          .productPrevious, .productNext {
+            width: 50px !important;
+            font-size: 42px !important;
+          }
+          .productImage {
+            height: 275px !important;
+            img {
+              width: 275px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 380px) {
+    .searchInput {
+      .inputContainer {
+        margin: 20px 0 0 0 !important;
+      }
+    }
+    .explanation {
+      padding: 8px 10px 20px 10px !important;
+    }
+    .result {
+      .productContainer {
+        .productId {
+          font-size: 90px !important;
+        }
+        .productName {
+          font-size: 20px !important;
+          max-width: 80% !important;
+        }
+        .product {
+          .productPrevious, .productNext {
+            font-size: 34px !important;
+          }
+          .productImage {
+            height: 250px !important;
+            img {
+              width: 250px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 360px) {
+    .searchInput {
+      .suggestions {
+        li {
+          font-size: 14px !important;
+        }
+      }
+    }
+    .inputContainer {
+      .productInput {
+        font-size: 14px !important;
+      }
+    }
+    .result {
+      .productContainer {
+        .product {
+          .productImage {
+            height: 200px !important;
+            img {
+              width: 200px !important;
+            }
+          }
+        }
+      }
+    }
   }
 </style>

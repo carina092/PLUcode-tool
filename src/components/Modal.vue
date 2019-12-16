@@ -94,4 +94,22 @@ export default {
 .modal-leave-to {
   transition: opacity .5s;
 }
+
+  @media screen and (max-width: 880px) {
+    .modalContainer {
+      max-width: 80% !important;
+    }
+  }
+
+  @media screen and (max-width: 360px) {
+    .modalMask {
+      .modalWrapper {
+        .modalContainer {
+          .modalContent {
+            padding: 0 10px;
+          }
+        }
+      }
+    }
+  }
 </style>
