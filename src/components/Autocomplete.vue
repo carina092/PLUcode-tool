@@ -313,7 +313,7 @@ export default {
       z-index: 9990;
       .productInput {
         display: block;
-        width: calc(100% - 21px);
+        width: 100%;
         height: 50px;
         font-size: 18px;
         padding: 0 10px;
@@ -324,22 +324,24 @@ export default {
         box-shadow: 0px 0px 8px 0px rgba(142,191,250,0.5);
         z-index: 999;
         transition: all 0.4s ease;
+        box-sizing: border-box;
         &:focus {
           border: 1px solid #8ebffa;
           box-shadow: 0px 0px 10px 0px rgba(142,191,250,0.8);
         }
         &::placeholder {
           color: #a4a4a4;
-          max-width: 90%;
         }
       }
       .clearButton {
         position: absolute;
         top: 0;
-        right: 0;
-        margin: 16px;
+        right: 0px;
+        margin: 5px;
+        padding: 10px;
         font-size: 18px;
         color: #bbb;
+        background-color: #ffffff;
         &:hover {
           color: #3b3b3b;
           cursor: pointer;
@@ -563,12 +565,13 @@ export default {
 
   @media screen and (max-width: 480px) {
     .result {
+      margin: -30px 0 0 0 !important;
       .productContainer {
         .productId {
-          font-size: 100px !important;
+          font-size: 96px !important;
         }
         .productName {
-          font-size: 24px !important;
+          font-size: 22px !important;
         }
         .product {
           .productPrevious, .productNext {
@@ -592,13 +595,16 @@ export default {
       }
     }
     .explanation {
-      padding: 8px 10px 20px 10px !important;
+      padding: 3px 10px 20px 10px !important;
       span {
         font-size: 12px !important;
       }
     }
     .result {
       .productContainer {
+        .productId {
+          font-size: 92px !important;
+        }
         .product {
           .productPrevious, .productNext {
             width: 50px !important;
@@ -622,12 +628,12 @@ export default {
       }
     }
     .explanation {
-      padding: 8px 10px 20px 10px !important;
+      padding: 3px 10px 20px 10px !important;
     }
     .result {
       .productContainer {
         .productId {
-          font-size: 90px !important;
+          font-size: 82px !important;
         }
         .productName {
           font-size: 20px !important;
@@ -665,13 +671,32 @@ export default {
       .productContainer {
         .product {
           .productImage {
-            height: 200px !important;
+            height: 180px !important;
             img {
-              width: 200px !important;
+              width: 180px !important;
             }
           }
         }
       }
     }
   }
+
+  /* iPhone 5 / SE */
+  @media only screen
+  and (min-device-width: 320px)
+  and (max-device-width: 568px) {
+    .searchInput {
+      .inputContainer {
+        margin: 10px 0 0 0 !important;
+      }
+    }
+    .result {
+      .productContainer {
+        .productId {
+          font-size: 76px !important;
+        }
+      }
+    }
+  }
+
 </style>

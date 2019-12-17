@@ -15,6 +15,7 @@
     background-image: url('./assets/gradient.jpg');
     background-repeat: no-repeat;
     background-position: left top;
+    background-color: #E4D6DD;
   }
 
   #app {

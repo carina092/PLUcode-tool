@@ -107,6 +107,12 @@ export default {
         .modalContainer {
           .modalContent {
             padding: 0 10px;
+            h2 {
+              font-size: 20px !important;
+            }
+            p {
+              font-size: 14px !important;
+            }
           }
         }
       }

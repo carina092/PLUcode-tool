@@ -62,6 +62,7 @@ export default {
     .footer {
       span {
         font-size: 12px !important;
+        padding: 10px 20px 5px 20px !important;
       }
     }
   }
