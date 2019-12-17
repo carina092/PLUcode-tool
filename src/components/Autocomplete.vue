@@ -225,7 +225,7 @@ export default {
     transition: all 0.4s ease;
     &.activeResult > .result {
       display: block;
-      height: inherit;
+      /*height: inherit;*/
     }
     &.activeResult > .inputContainer {
       top: 0;
@@ -336,8 +336,8 @@ export default {
       .clearButton {
         position: absolute;
         top: 0;
-        right: 0px;
-        margin: 5px;
+        right: 0;
+        margin: 7px;
         padding: 10px;
         font-size: 18px;
         color: #bbb;
