@@ -1,7 +1,7 @@
 <template>
   <div class="pageContainer">
-   <Autocomplete></Autocomplete>
-    <Footer></Footer>
+    <Autocomplete/>
+    <Footer/>
   </div>
 </template>
 
