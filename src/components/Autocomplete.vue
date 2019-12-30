@@ -54,7 +54,7 @@
               <font-awesome-icon icon="chevron-left" />
             </div>
             <div class="productImage">
-              <img :src="currentResult.img"/>
+              <img :src="currentResult.img" @error="imageUrlAlt"/>
             </div>
             <div class="productNext"
                  @click="showNextProduct"
@@ -203,6 +203,10 @@ export default {
           this.searchQuery = `${this.currentResult.id} - ${this.currentResult.name} ${this.currentResult.type}`;
         }
       } return false;
+    },
+    imageUrlAlt(event) {
+      // eslint-disable-next-line no-param-reassign
+      event.target.src = 'https://lush-scents.co.uk/plu-tool/assets/404notfound.jpg';
     },
   },
   watch: {
