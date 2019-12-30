@@ -25,7 +25,7 @@
               v-for="(suggestion, index) in suggestions"
               :key="index"
               @click="selectResult(suggestion.id)"
-              :class="{ 'highlightedItem': suggestion.id === highlightedResult.id }"
+              :class="{ 'highlightedItem': suggestion.id === highlightedResult.id, 'hideItem': suggestion.id < highlightedResult.id }"
               @keyup='nextItem'
       >
         {{ suggestion.id }} - {{suggestion.name}} {{ suggestion.type }} {{ suggestion.attribute }}</li>
@@ -365,6 +365,7 @@ export default {
       z-index: 998;
       margin: -2px 0 0;
       li {
+        transition: all 0.4s ease;
         padding: 7px 10px;
         font-size: 16px;
         &:hover {
@@ -392,6 +393,13 @@ export default {
         cursor: pointer;
         transition: all 0.4s ease;
       }
+    }
+
+    .hideItem {
+      transition: all 0.4s ease;
+      opacity: 0;
+      height: 0;
+      padding: 0 10px !important;
     }
 
     .highlightedItem {
