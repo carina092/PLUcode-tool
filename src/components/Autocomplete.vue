@@ -334,7 +334,7 @@ export default {
           box-shadow: 0px 0px 10px 0px rgba(142,191,250,0.8);
         }
         &::placeholder {
-          color: #a4a4a4;
+          color: #1F2021;
         }
       }
       .clearButton {

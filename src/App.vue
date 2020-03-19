@@ -12,16 +12,12 @@
     width: 100%;
     font-size: 16px;
     font-family: 'Helvetica', Arial, sans-serif;
-    background-image: url('./assets/gradient.jpg');
-    background-repeat: no-repeat;
-    background-position: left top;
-    background-color: #E4D6DD;
+    background-color: #000;
   }
 
   #app {
     height: 100%;
     width: 100%;
-    background: rgba(0,0,0,0.05);
   }
 
   .pageContainer {

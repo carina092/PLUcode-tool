@@ -22,9 +22,9 @@ export default {
     align-content: center;
     span {
       padding: 10px;
-      color: #75A6E1;
+      color: #fff;
       font-size: 14px;
-      opacity: 0.75;
+      opacity: 1;
       transition: all 0.4s ease;
       line-height: 1.4;
       .svg-inline--fa {
